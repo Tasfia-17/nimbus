@@ -1,7 +1,6 @@
-import { config } from 'dotenv';
-
-// Load environment variables
-config({ path: '.env.local' });
+// Prisma configuration
+// Environment variables are automatically loaded by Next.js
+// This file is kept for potential future configuration needs
 
 export default {
   datasources: {
