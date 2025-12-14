@@ -143,12 +143,12 @@ export class ToolExecutor {
     const { stdout, stderr } = await execAsync(command, options);
 
     if (stderr && !stdout) {
-      throw new Error(stderr);
+      throw new Error(String(stderr));
     }
 
     return {
-      stdout: stdout.trim(),
-      stderr: stderr.trim(),
+      stdout: String(stdout).trim(),
+      stderr: String(stderr).trim(),
     };
   }
 
