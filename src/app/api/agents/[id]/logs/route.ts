@@ -4,9 +4,9 @@ export const runtime = 'edge';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const agentId = params.id;
+  const { id: agentId } = await params;
 
   // Create a readable stream for Server-Sent Events
   const encoder = new TextEncoder();

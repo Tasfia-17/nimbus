@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 // POST /api/webhooks/[agentId] - Handle webhook triggers
 export async function POST(
   request: NextRequest,
-  { params }: { params: { agentId: string } }
+  { params }: { params: Promise<{ agentId: string }> }
 ) {
   try {
-    const agentId = params.agentId;
+    const { agentId } = await params;
     const body = await request.json();
 
     // Mock webhook handling
