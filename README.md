@@ -515,21 +515,10 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
-## 📞 Contact & Support
-
-- **GitHub Issues:** [Report bugs or request features](https://github.com/Tasfia-17/nimbus/issues)
-- **Discussions:** [Join the community](https://github.com/Tasfia-17/nimbus/discussions)
-- **Email:** [Contact maintainer](mailto:your-email@example.com)
-- **Twitter:** [@NimbusAI](https://twitter.com/NimbusAI)
-
----
-
 <div align="center">
 
 **⭐ Star this repo if you find it useful!**
 
-Made with ☁️ by developers, for developers
-
-[Get Started →](docs/getting-started/quick-start.md)
+Built with ☁️ for the AI Agents Assemble Hackathon 2024
 
 </div>
