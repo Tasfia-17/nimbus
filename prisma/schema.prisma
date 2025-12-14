@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Agent model: 
+//    id (string, UUID)
+//    name (string)
+//    description (string, optional)
+//    status (enum: ACTIVE, PAUSED, DELETED)
+//    kestraWorkflowId (string, optional)
+//    instructions (text)
+//    model (string, default "gpt-4")
+//    triggers (JSON - array of trigger configs)
+//    tools (JSON - array of tool configs)
+//    createdAt, updatedAt (datetime)
+model Agent {
+  id              String       @id @default(uuid())
+  name            String
+  description     String?      @db.Text
+  status          AgentStatus  @default(ACTIVE)
+  kestraWorkflowId String?      @map("kestra_workflow_id")
+  instructions    String       @db.Text
+  model           String       @default("gpt-4")
+  triggers        Json         @default("[]")
+  tools           Json         @default("[]")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  executions      Execution[]
+
+  @@map("agents")
+}
+
+enum AgentStatus {
+  ACTIVE
+  PAUSED
+  DELETED
+}
+
+// Execution model:
+//    id (string, UUID)
+//    agentId (foreign key to Agent)
+//    status (enum: RUNNING, SUCCESS, FAILED, CANCELLED)
+//    startedAt (datetime)
+//    completedAt (datetime, optional)
+//    duration (int, optional - in seconds)
+//    cost (float, optional)
+//    logs (JSON - array of log entries)
+//    result (JSON, optional)
+//    error (text, optional)
+model Execution {
+  id          String    @id @default(uuid())
+  agentId     String    @map("agent_id")
+  status      ExecutionStatus @default(RUNNING)
+  startedAt   DateTime  @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  duration    Int?      @map("duration_seconds")
+  cost        Decimal?  @db.Decimal(10, 4)
+  logs        Json      @default("[]")
+  result      Json? 
+  error       String?   @db.Text
+
+  agent       Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@map("executions")
+}
+
+enum ExecutionStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+// Tool model:
+//    id (string, UUID)
+//    name (string)
+//    description (text)
+//    type (enum: API, CLI, FUNCTION, DATABASE)
+//    config (JSON)
+//    createdAt (datetime)
+model Tool {
+  id          String    @id @default(uuid())
+  name        String
+  description String    @db.Text
+  type        ToolType
+  config      Json      @default("{}")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("tools")
+}
+
+enum ToolType {
+  API
+  CLI
+  FUNCTION
+  DATABASE
+}
