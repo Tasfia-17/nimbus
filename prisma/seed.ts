@@ -5,10 +5,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding database with example tools...");
 
-  const githubApiTool = await prisma.tool.upsert({
-    where: { name: "GitHub API" },
-    update: {},
-    create: {
+  // Clear existing tools first (optional - comment out if you want to keep existing data)
+  await prisma.tool.deleteMany({});
+
+  const githubApiTool = await prisma.tool.create({
+    data: {
       name: "GitHub API",
       description: "Provides access to various GitHub API functionalities.",
       type: "API",
@@ -22,10 +23,8 @@ async function main() {
     },
   });
 
-  const sendEmailTool = await prisma.tool.upsert({
-    where: { name: "Send Email" },
-    update: {},
-    create: {
+  const sendEmailTool = await prisma.tool.create({
+    data: {
       name: "Send Email",
       description: "Sends an email to specified recipients.",
       type: "FUNCTION",
@@ -35,10 +34,8 @@ async function main() {
     },
   });
 
-  const webScraperTool = await prisma.tool.upsert({
-    where: { name: "Web Scraper" },
-    update: {},
-    create: {
+  const webScraperTool = await prisma.tool.create({
+    data: {
       name: "Web Scraper",
       description: "Scrapes content from a given URL.",
       type: "FUNCTION",
